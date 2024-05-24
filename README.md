@@ -1,1 +1,5 @@
-This file is temporarily gugugu.
+# rust_geometry
+
+Rust程序期末大作业 by 戴傅聪
+
+包含计算几何基本元素及常见算法，设计贴合个人算法竞赛代码风格
