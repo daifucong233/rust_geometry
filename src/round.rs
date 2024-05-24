@@ -34,6 +34,23 @@ impl Round {
 }
 
 /// 计算三个点构成三角形的内心
+///
+///     use rust_geometry::eq_f64;
+///     use rust_geometry::point::Point;
+///     use rust_geometry::line::Line;
+///     use rust_geometry::round::incentre;
+///
+///     let a = Point::new(0.0, 0.0);
+///     let b = Point::new(1.0, 0.0);
+///     let c = Point::new(1.0, 1.0);
+///     let o = incentre(a, b, c);
+///     
+///     let lena = (o - Line::new(b, c).proj(o)).dis();
+///     let lenb = (o - Line::new(a, c).proj(o)).dis();
+///     let lenc = (o - Line::new(a, b).proj(o)).dis();
+///     assert!(eq_f64(lena, lenb));
+///     assert!(eq_f64(lenb, lenc));
+///
 pub fn incentre(a: Point, b: Point, c: Point) -> Point {
     if a == b && b == c {
         return a
@@ -44,13 +61,31 @@ pub fn incentre(a: Point, b: Point, c: Point) -> Point {
     (a * la + b * lb + c * lc) / (la + lb + lc)
 }
 
-/// todo
-pub fn circumcentre(a: Point, b: Point, c: Point) -> Option<Point> {
+/// 计算三个点构成三角形的外心
+///
+///     use rust_geometry::point::Point;
+///     use rust_geometry::round::circum;
+///
+///     let a = Point::new(0.0, 0.0);
+///     let b = Point::new(1.0, 0.0);
+///     let c = Point::new(1.0, 1.0);
+///     let o = circum(a, b, c);
+///     assert_eq!(o, Some(Point::new(0.5, 0.5)));
+///
+pub fn circum(a: Point, b: Point, c: Point) -> Option<Point> {
     if a == b && b == c {
         return Some(a)
     }
     if ((b - a) ^ (c - a)).abs() < EPS {
         return None
     }
-    Some(Point::new(0.0, 0.0))
+    let v1 = (b - a) * 2.0;
+    let v2 = (c - b) * 2.0;
+    let c1 = b.sqrdis() - a.sqrdis();
+    let c2 = c.sqrdis() - b.sqrdis();
+
+    let x = (c1 * v2.y - c2 * v1.y) / (v1 ^ v2);
+    let y = (c2 * v1.x - c1 * v2.x) / (v1 ^ v2);
+
+    Some(Point { x, y })
 }
