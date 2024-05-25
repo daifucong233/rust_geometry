@@ -3,6 +3,7 @@ use std::fmt;
 use std::cmp::PartialEq;
 use std::ops::{Add, Sub, Mul, Div, Neg, BitXor};
 
+/// `Point` 计算几何最基本的数据类型，既能表示点也能表示向量。支持向量的加法减法，向量与常数的乘法除法，向量的叉乘点乘（运算符号分别为 `^` 和 `*`）等基础运算。
 #[derive(Debug, Copy, Clone)]
 pub struct Point {
     pub x: f64,
@@ -139,6 +140,11 @@ impl Point {
     /// 点到原点的距离的平方，向量模长的平方。
     pub fn sqrdis(&self) -> f64 {
         (*self) * (*self)
+    }
+
+    /// 向量归一化。
+    pub fn normalize(&self) -> Self {
+        *self / self.dis()
     }
 
     /// 将向量逆时针旋转 `theta` 的角度，其中 `theta` 为弧度制。
